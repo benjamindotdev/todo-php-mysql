@@ -1,8 +1,14 @@
 import type { Todo } from "../../global.d.ts";
 import { Pencil, Delete } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const TodoItem = ({ todo }: { todo: Todo }) => {
+export const TodoItem = ({
+  todo,
+  fetchTodos,
+}: {
+  todo: Todo;
+  fetchTodos: () => void;
+}) => {
   const {
     id,
     title,
@@ -13,6 +19,20 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
     created_at,
     updated_at,
   } = todo;
+
+  const navigate = useNavigate();
+
+  const handleDelete = async () => {
+    try {
+      await fetch(`http://localhost:80/todo/api/${id}`, {
+        method: "DELETE",
+      });
+      await fetchTodos();
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
+  };
   return (
     <article className="flex flex-col gap-4 p-6 border-2 rounded-xl border-slate-200 shadow-md">
       <div className="flex flex-row justify-between">
@@ -24,12 +44,13 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
           >
             Edit <Pencil />
           </Link>
-          <Link
-            to={`/${id}/delete`}
+          <button
+            type="button"
+            onClick={handleDelete}
             className="flex flex-row gap-2 border-2 p-4 rounded-md"
           >
             Delete <Delete />
-          </Link>
+          </button>
         </div>
       </div>
       <p className="">{description}</p>

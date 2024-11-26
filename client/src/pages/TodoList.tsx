@@ -9,18 +9,18 @@ export const TodoList = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const [loading, setLoading] = useState(true);
 
+  const fetchTodos = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:80/todo/api/index.php"
+      );
+      setTodos(response.data);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+      throw error;
+    }
+  };
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:80/todo/api/index.php"
-        );
-        setTodos(response.data);
-      } catch (error) {
-        console.error("Error fetching todos:", error);
-        throw error;
-      }
-    };
     fetchTodos();
   }, []);
 
@@ -35,7 +35,9 @@ export const TodoList = () => {
         {loading ? (
           <li>Loading...</li>
         ) : (
-          todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+          todos.map((todo) => (
+            <TodoItem key={todo.id} todo={todo} fetchTodos={fetchTodos} />
+          ))
         )}
       </ul>
     </PageContainer>
