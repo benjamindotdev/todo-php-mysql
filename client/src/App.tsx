@@ -11,17 +11,17 @@ function App() {
   return (
     <BrowserRouter>
       <TodoProvider>
-        <nav className="bg-slate-800 w-full">
-          <ul className="w-full flex flex-row justiy-end text-white font-bold gap-6">
-            <li>
-              <Link to="/">List</Link>
-            </li>
-            <li>
-              <Link to="/create">Create</Link>
-            </li>
-          </ul>
-        </nav>
-        <main className="flex flex-col p-12 w-full">
+        <main className="flex flex-col gap-8 p-12 w-full">
+          <nav className="bg-slate-200 text-slate-800 flex flex-row justify-center gap-6">
+            <ul className="w-full flex flex-row justify-center font-bold gap-6">
+              <li className="p-6 text-2xl">
+                <Link to="/">List</Link>
+              </li>
+              <li className="p-6 text-2xl">
+                <Link to="/create">Create</Link>
+              </li>
+            </ul>
+          </nav>
           <Routes>
             <Route path="/" element={<TodoList />} />
             <Route path="/create" element={<CreateTodo />} />

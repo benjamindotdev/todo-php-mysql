@@ -66,4 +66,18 @@ switch ($method) {
         }
         echo json_encode($response);
         break;
+    case "DELETE":
+        $sql = "DELETE FROM todo WHERE id = :id";
+        $path = explode('/', $_SERVER['REQUEST_URI']);
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $path[3]);
+
+        if ($stmt->execute()) {
+            $response = ['status' => 1, 'message' => 'Todo deleted successfully.'];
+        } else {
+            $response = ['status' => 0, 'message' => 'Failed to delete todo.'];
+        }
+        echo json_encode($response);
+        break;
 }
